@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Yash's CP Cheatsheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap');
+
+  :root {
+    --bg:      #0d0f14;
+    --surface: #13161d;
+    --border:  #1e2330;
+    --accent:  #7ee787;
+    --blue:    #79c0ff;
+    --orange:  #ffa657;
+    --red:     #ff7b72;
+    --purple:  #d2a8ff;
+    --muted:   #8b949e;
+    --text:    #e6edf3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    padding: 2.5rem 2rem;
+  }
+
+  /* ── Header ── */
+  header { text-align: center; margin-bottom: 3rem; }
+  header::after {
+    content: '';
+    display: block;
+    width: 100px; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--blue));
+    margin: 1rem auto 0;
+    border-radius: 2px;
+  }
+  h1 {
+    font-size: 2.5rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--blue));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    color: var(--muted); font-size: 0.8rem;
+    margin-top: 0.4rem; letter-spacing: 2.5px; text-transform: uppercase;
+  }
+
+  /* ── Grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.2rem;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+  .wide { grid-column: 1 / -1; }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.18s, transform 0.18s;
+  }
+  .card:hover { border-color: #2a3040; transform: translateY(-2px); }
+
+  .card-header {
+    padding: 0.7rem 1rem;
+    display: flex; align-items: center; gap: 0.55rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-title { font-size: 0.88rem; font-weight: 700; }
+
+  /* ── Tags ── */
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; font-weight: 700;
+    padding: 2px 7px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 0.8px;
+  }
+  .t-type  { background:#1a2d1a; color:var(--accent); }
+  .t-macro { background:#18222e; color:var(--blue); }
+  .t-loop  { background:#2a1e10; color:var(--orange); }
+  .t-io    { background:#2a1518; color:var(--red); }
+  .t-util  { background:#221a2e; color:var(--purple); }
+  .t-const { background:#1e1e10; color:#e3c96e; }
+  .t-debug { background:#182218; color:#56d364; }
+  .t-setup { background:#1e1e2e; color:var(--blue); }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; }
+  td {
+    padding: 0.52rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.83rem; line-height: 1.5; vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem; color: var(--blue);
+    white-space: nowrap; width: 40%;
+  }
+  td:last-child { color: var(--muted); }
+  td em  { color: var(--accent); font-style: normal; font-weight: 700; }
+  td code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem; color: var(--blue);
+  }
+
+  /* ── Code snippet block ── */
+  .snip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; line-height: 1.9;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .kw { color: var(--red); }
+  .fn { color: var(--purple); }
+  .cm { color: var(--muted); font-style: italic; }
+  .nm { color: var(--orange); }
+  .mc { color: var(--accent); font-weight: 700; }
+  .tp { color: var(--blue); }
+
+  /* ── Tip box ── */
+  .tip {
+    margin: 0.7rem 1rem;
+    padding: 0.6rem 0.85rem;
+    background: #191d28;
+    border-left: 3px solid var(--orange);
+    border-radius: 0 6px 6px 0;
+    font-size: 0.8rem; color: var(--muted); line-height: 1.6;
+  }
+  .tip strong { color: var(--orange); }
+  .tip code { font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:var(--blue); }
+
+  /* ── Source badge ── */
+  .src {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem; font-weight: 700;
+    padding: 2px 7px; border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.75;
+  }
+  .s1    { background:#18222e; color:var(--blue); }
+  .s2    { background:#1a2d1a; color:var(--accent); }
+  .sboth { background:#221a2e; color:var(--purple); }
+  .sadd  { background:#2a1e10; color:var(--orange); }
+
+  footer {
+    text-align: center; margin-top: 3rem;
+    color: var(--muted); font-size: 0.75rem; letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Yash's CP Cheatsheet</h1>
+  <p class="subtitle">C++17 · Combined Template · Quick Reference</p>
+</header>
+
+<div class="grid">
+
+  <!-- SETUP -->
+  <div class="card wide">
+    <div class="card-header">
+      <span class="tag t-setup">Setup</span>
+      <span class="card-title">Trigger & Compilation</span>
+    </div>
+    <div class="snip">
+<span class="cm">// Type prefix in VS Code → Tab to expand</span>
+Prefix: <span class="mc">hello</span>
+
+<span class="cm">// Local — enables debug() output via algo/debug.h</span>
+<span class="kw">g++</span> <span class="nm">-DLOCAL</span> -std=c++17 -O2 -Wall -o sol sol.cpp
+
+<span class="cm">// Judge — debug() becomes no-op (42), zero overhead</span>
+<span class="kw">g++</span> -std=c++17 -O2 -o sol sol.cpp
+    </div>
+  </div>
+
+  <!-- TYPES -->
+  <div class="card">
+    <div class="card-header">
+      <span class="tag t-type">Types</span>
+      <span class="card-title">Type Aliases</span>
+      <span class="src sboth">both</span>
+    </div>
+    <table>
+      <tr><td>ll</td><td><em>long long int</em> — use for everything by default</td></tr>
+      <tr><td>ull</td><td><em>unsigned long long</em> — when values can't be negative</td></tr>
+      <tr><td>ld</td><td><em>long double</em> — geometry / precision floats</td></tr>
+      <tr><td>vi / vvi</td><td>vector&lt;ll&gt; / 2D vector&lt;ll&gt; — <em>ll-based</em></td></tr>
+      <tr><td>vint</td><td>vector&lt;int&gt; — explicit int when needed</td></tr>
+      <tr><td>ii / pii</td><td>pair&lt;ll,ll&gt; / pair&lt;int,int&gt;</td></tr>
+      <tr><td>vp</td><td>vector&lt;ii&gt; — list of ll pairs</td></tr>
+    </table>
+    <div class="tip">
+      <strong>Convention:</strong> <code>vi</code> = <code>vector&lt;ll&gt;</code> here. Use <code>vint</code> when you explicitly need ints (e.g. graph adjacency lists).
+    </div>
+  </div>
+
+  <!-- MACROS -->
+  <div class="card">
+    <div class="card-header">
+      <span class="tag t-macro">Macros</span>
+      <span class="card-title">Shorthand Macros</span>
+      <span class="src sboth">both</span>
+    </div>
+    <table>
+      <tr><td>pb</td><td><em>push_back</em></td></tr>
+      <tr><td>F &nbsp;/&nbsp; S</td><td><em>first / second</em> on any pair</td></tr>
+      <tr><td>all(v)</td><td>(v).begin(), (v).end() — for STL algorithms</td></tr>
+      <tr><td>srt(v)</td><td>sort <em>ascending</em></td></tr>
+      <tr><td>rsrt(v)</td><td>sort <em>descending</em> — rbegin/rend</td></tr>
+      <tr><td>endl</td><td><em>'\n'</em> — never use std::endl (flushes = slow)</td></tr>
+    </table>
+  </div>
+
+  <!-- REP / PER -->
+  <div class="card">
+    <div class="card-header">
+      <span class="tag t-loop">Loops</span>
+      <span class="card-title">rep() &amp; per()</span>
+      <span class="src s1">snippet 1 + added</span>
+    </div>
+    <table>
+      <tr><td>rep(i, a, b)</td><td>i = a … b−1 &nbsp;<em>forward</em>, i is ll</td></tr>
+      <tr><td>per(i, a, b)</td><td>i = b−1 … a &nbsp;<em>reverse</em>, i is ll</td></tr>
+    </table>
+    <div class="snip">
+<span class="cm">// Standard 0-indexed</span>
+<span class="mc">rep</span>(i, <span class="nm">0</span>, n) cout &lt;&lt; a[i] &lt;&lt; <span class="nm">' '</span>;
+
+<span class="cm">// Reverse (e.g. suffix DP, stack pop order)</span>
+<span class="mc">per</span>(i, <span class="nm">0</span>, n) process(a[i]);
+
+<span class="cm">// 2D grid</span>
+<span class="mc">rep</span>(i, <span class="nm">0</span>, n) <span class="mc">rep</span>(j, <span class="nm">0</span>, m) cin &gt;&gt; g[i][j];
+
+<span class="cm">// Non-zero start</span>
+<span class="mc">rep</span>(i, <span class="nm">1</span>, n+<span class="nm">1</span>) prefix[i] = prefix[i-<span class="nm">1</span>] + a[i-<span class="nm">1</span>];
+    </div>
+  </div>
+
+  <!-- I/O HELPERS (safe) -->
+  <div class="card">
+    <div class="card-header">
+      <span class="tag t-io">I/O</span>
+      <span class="card-title">vin() / pin() / vin2() — Safe Helpers</span>
+      <span class="src s2">snippet 2 + added</span>
+    </div>
+    <table>
+      <tr><td>vin(a, n)</td><td>Resize vi to n then read — <em>never forgets resize</em></td></tr>
+      <tr><td>pin(a)</td><td>Print vi, space-sep, <em>no trailing space</em>, newline</td></tr>
+      <tr><td>vin2(g, n, m)</td><td>Read full 2D grid — <em>safe assign + nested read</em></td></tr>
+    </table>
+    <div class="snip">
+vi a;  <span class="fn">vin</span>(a, n);          <span class="cm">// safe 1-liner</span>
+<span class="fn">pin</span>(a);               <span class="cm">// "1 2 3\n" no trailing space</span>
+
+vvi g; <span class="fn">vin2</span>(g, n, m);   <span class="cm">// full grid input</span>
+    </div>
+    <div class="tip">
+      <strong>Why not <code>cin &gt;&gt; v</code> directly?</strong> It silently reads garbage if you forget to resize first. <code>vin()</code> always resizes, so it's impossible to get that bug.
+    </div>
+  </div>
+
+  <!-- GENERIC I/O OPERATORS -->
+  <div class="card">
+    <div class="card-header">
+      <span class="tag t-io">I/O</span>
+      <span class="card-title">Generic cin / cout Operators</span>
+      <span class="src s1">snippet 1</span>
+    </div>
+    <table>
+      <tr><td>cin &gt;&gt; pair</td><td>Reads p.first then p.second automatically</td></tr>
+      <tr><td>cout &lt;&lt; pair</td><td>Prints "a b"</td></tr>
+      <tr><td>cout &lt;&lt; vector</td><td>Space-sep, <em>no trailing space</em>, auto newline</td></tr>
+    </table>
+    <div class="snip">
+<span class="cm">// Pairs</span>
+ii p;  cin &gt;&gt; p;   cout &lt;&lt; p;   <span class="cm">// "x y"</span>
+
+<span class="cm">// Vector of pairs</span>
+<span class="tp">vector</span>&lt;ii&gt; v(n);  cin &gt;&gt; v;  cout &lt;&lt; v;
+
+<span class="cm">// Pre-size required! Use vin() to be safe</span>
+vi a(n);  cin &gt;&gt; a;   <span class="cm">// OK — already sized</span>
+    </div>
+  </div>
+
+  <!-- CHMIN / CHMAX -->
+  <div class="card">
+    <div class="card-header">
+      <span class="tag t-util">Utils</span>
+      <span class="card-title">chmin / chmax</span>
+      <span class="src sadd">added</span>
+    </div>
+    <table>
+      <tr><td>chmin(a, b)</td><td>a = min(a,b) — returns <em>true</em> if a changed</td></tr>
+      <tr><td>chmax(a, b)</td><td>a = max(a,b) — returns <em>true</em> if a changed</td></tr>
+    </table>
+    <div class="snip">
+<span class="cm">// DP transition — replaces verbose if-block</span>
+<span class="fn">chmin</span>(dp[i], dp[j] + cost);
+
+<span class="cm">// Running answer</span>
+ll ans = <span class="nm">0</span>;
+<span class="mc">rep</span>(i, <span class="nm">0</span>, n) <span class="fn">chmax</span>(ans, a[i]);
+
+<span class="cm">// Trigger rebuild only on improvement</span>
+<span class="kw">if</span> (<span class="fn">chmin</span>(best, candidate)) rebuild();
+    </div>
+  </div>
+
+  <!-- CONSTANTS -->
+  <div class="card">
+    <div class="card-header">
+      <span class="tag t-const">Constants</span>
+      <span class="card-title">Built-in Constants</span>
+      <span class="src s1">snippet 1</span>
+    </div>
+    <table>
+      <tr><td>INF</td><td><em>1e18</em> as ll — safe ll infinity</td></tr>
+      <tr><td>INF32</td><td><em>1e9</em> as int — safe int infinity</td></tr>
+      <tr><td>MOD</td><td><em>1e9 + 7</em> — standard modulus</td></tr>
+    </table>
+    <div class="tip">
+      <strong>⚠ Overflow:</strong> <code>INF + INF</code> overflows if both are int. Always use ll <code>INF</code> in ll contexts. When adding to INF, cast first: <code>(ll)INF32 + x</code>.
+    </div>
+  </div>
+
+  <!-- DEBUG -->
+  <div class="card">
+    <div class="card-header">
+      <span class="tag t-debug">Debug</span>
+      <span class="card-title">debug() Macro</span>
+      <span class="src s2">snippet 2</span>
+    </div>
+    <table>
+      <tr><td>debug(x)</td><td>Prints variable name + value (only with <em>-DLOCAL</em>)</td></tr>
+      <tr><td>debug(x, y, z)</td><td>Variadic — any number of args</td></tr>
+      <tr><td>On judge</td><td>Compiles to <em>42</em> — optimized away, zero cost</td></tr>
+    </table>
+    <div class="snip">
+ll x = <span class="nm">5</span>;  vi v = {<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>};
+<span class="fn">debug</span>(x, v);
+<span class="cm">// local:  [debug] x=5, v=[1,2,3]</span>
+<span class="cm">// judge:  42;  ← removed by optimizer</span>
+    </div>
+  </div>
+
+  <!-- PATTERNS (wide) -->
+  <div class="card wide">
+    <div class="card-header">
+      <span class="tag t-macro">Patterns</span>
+      <span class="card-title">Everyday CP Patterns — Using This Template</span>
+    </div>
+    <table>
+      <tr>
+        <td>Read n longs (safe)</td>
+        <td><code>vi a; vin(a, n);</code></td>
+      </tr>
+      <tr>
+        <td>Read n pairs</td>
+        <td><code>vp v(n); cin >> v;</code> &nbsp;— generic operator handles it</td>
+      </tr>
+      <tr>
+        <td>Read 2D grid (safe)</td>
+        <td><code>vvi g; vin2(g, n, m);</code></td>
+      </tr>
+      <tr>
+        <td>Sort pairs by second</td>
+        <td><code>sort(all(v), [](ii a, ii b){ return a.S &lt; b.S; });</code></td>
+      </tr>
+      <tr>
+        <td>Prefix sum</td>
+        <td><code>vi pre(n+1, 0); rep(i,0,n) pre[i+1] = pre[i] + a[i];</code></td>
+      </tr>
+      <tr>
+        <td>Frequency map</td>
+        <td><code>map&lt;ll,ll&gt; freq; for (auto x : a) freq[x]++;</code></td>
+      </tr>
+      <tr>
+        <td>Binary search on answer</td>
+        <td><code>ll lo=0, hi=1e9; while(lo&lt;hi){ ll mid=(lo+hi)/2; check(mid)?hi=mid:lo=mid+1; }</code></td>
+      </tr>
+      <tr>
+        <td>Modular add (safe)</td>
+        <td><code>ans = (ans + x % MOD + MOD) % MOD;</code> &nbsp;— +MOD handles negatives</td>
+      </tr>
+      <tr>
+        <td>Running max / min</td>
+        <td><code>ll ans=0; rep(i,0,n) chmax(ans, a[i]);</code></td>
+      </tr>
+      <tr>
+        <td>Reverse traversal</td>
+        <td><code>per(i, 0, n) dp[i] = dp[i+1] + a[i];</code></td>
+      </tr>
+      <tr>
+        <td>Sort descending</td>
+        <td><code>rsrt(a);</code></td>
+      </tr>
+      <tr>
+        <td>Print vector clean</td>
+        <td><code>pin(a);</code> &nbsp;— no trailing space, judge-safe</td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+<footer>Yash Gupta &nbsp;·&nbsp; CP Template Reference &nbsp;·&nbsp; C++17</footer>
+</body>
+</html>
